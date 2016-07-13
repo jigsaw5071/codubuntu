@@ -1,0 +1,56 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+bool cyclicUtil(int s,vector<list<int>> &G,vector<bool> &visited,int parent){
+visited[s]=true;
+list<int> L=G[s];
+for(list<int>:: iterator iter=L.begin();iter!=L.end();++iter){
+if(!visited[*iter]){
+if(cyclicUtil(*iter,G,visited,s)){
+return true;}
+}
+else {
+if(*iter!=parent){
+return true;
+}
+}
+}
+return false;
+}
+
+bool isUndirectedCyclic(vector<list<int>> &G,int V,int E){
+vector<bool> visited(V,false);
+for(int i=0;i<V;++i){
+if(!visited[i]){
+if(cyclicUtil(i,G,visited,-1)){
+return true;
+}
+}
+
+}
+
+return false;
+
+}
+
+int main(void){
+int V,E;
+cin>>V>>E;
+vector<list<int>> G(V);
+for(int i=0;i<E;++i){
+int x,y;
+cin>>x>>y;
+G[x].push_back(y);
+G[y].push_back(x);
+}
+
+cout<<isUndirectedCyclic(G,V,E);
+
+
+
+
+
+
+return 0;
+}
