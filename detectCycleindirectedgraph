@@ -1,0 +1,54 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isCyclicUtil(int s,vector<bool> &visited,vector<bool> &recStack,vector<list<int>> &G){
+if(visited[s]==false){
+visited[s]=true;
+recStack[s]=true;
+list<int> L=G[s];
+for(list<int>::iterator iter=L.begin();iter!=L.end();++iter){
+if(!visited[*iter] && isCyclicUtil(*iter,visited,recStack,G)){
+return true;
+}
+else if(recStack[*iter]){
+return true;
+}
+}
+}
+recStack[s]=false;
+return false;
+
+
+}
+
+bool isDirectedCyclic(vector<list<int>> &G,int V,int E){
+vector<bool> visited(V,false);
+vector<bool> recStack(V,false);
+for(int i=0;i<V;++i){
+if(isCyclicUtil(i,visited,recStack,G)){
+  return true;
+}
+}
+
+return false;
+}
+
+int main(void){
+int V,E;
+cin>>V>>E;
+vector<list<int>> G(V);
+for(int i=0;i<E;++i){
+int x,y;
+cin>>x>>y;
+G[x].push_back(y);
+}
+
+cout<<isDirectedCyclic(G,V,E);
+
+
+
+
+
+return 0;
+}
