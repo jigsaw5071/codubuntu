@@ -1,0 +1,60 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isBipartiteUtil(vector<int> &color,vector<list<int>> &G, int s){
+color[s]=1;
+queue<int> Q;
+Q.push(s);
+while(!Q.empty()){
+int front_node=Q.front();
+Q.pop();
+list<int> L=G[front_node];
+for(list<int>::iterator iter=L.begin();iter!=L.end();++iter){
+if(color[*iter]==-1){
+color[*iter]=1-color[front_node];
+Q.push(*iter);
+}
+else{
+if(color[*iter]==color[front_node]){
+return false;
+}
+}
+
+}
+}
+return true;
+}
+
+bool isBipartite(vector<list<int>> &G,int V, int E){
+vector<int> color(V,-1);
+for(int i=0;i<V;++i){
+if(color[i]==-1){
+if(!isBipartiteUtil(color,G,i)){
+return false;
+}
+}
+}
+return true;
+}
+int main(void){
+int V,E;
+cin>>V>>E;
+vector<list<int>> G(V);
+///This is the case of undirected graph
+for(int i=0;i<E;++i){
+int u,v;
+cin>>u>>v;
+G[u].push_back(v);
+G[v].push_back(u);
+}
+cout<<isBipartite(G,V,E);
+
+
+
+
+
+
+
+return 0;
+}
