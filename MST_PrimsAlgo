@@ -1,0 +1,62 @@
+#include<iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+class Compare{
+public:
+bool operator()(pair<int,int> x,pair<int,int> y){
+return x.second > y.second;
+}
+};
+
+void makeMST(vector<list<pair<int,int>>> &G,int V,int E,int s){
+vector<int> parent(V,-1);
+vector<bool> inMST(V,false);
+vector<int> key(V,INT_MAX);
+priority_queue<pair<int,int>,vector<pair<int,int>>,Compare> Q;
+Q.push(make_pair(s,0));
+key[s]=0;
+while(!Q.empty()){
+pair<int,int> top_value=Q.top();
+Q.pop();
+int u=top_value.first;
+int w=top_value.second;
+inMST[u]=true;
+list<pair<int,int>> L=G[u];
+for(list<pair<int,int>>::iterator iter=L.begin();iter!=L.end();++iter){
+int v=(*iter).first;
+int weight=(*iter).second;
+if(inMST[v]==false && key[v]>weight){
+key[v]=weight;
+Q.push(make_pair(v,key[v]));
+parent[v]=u;
+}
+}
+
+
+}
+for(int i=1;i<V;++i){
+cout<<parent[i]<<" "<<i<<endl;
+}
+}
+int main(void){
+int V,E;
+cin>>V>>E;
+vector<list<pair<int,int>>> G(V);
+for(int i=0;i<E;++i){
+int u,v,w;
+cin>>u>>v>>w;
+G[u].push_back(make_pair(v,w));
+G[v].push_back(make_pair(u,w));
+}
+int S;
+cin>>S;
+makeMST(G,V,E,S);
+
+
+
+
+
+
+return 0;
+}
